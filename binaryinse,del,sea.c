@@ -34,7 +34,7 @@ struct node* search(struct node *root,int searchdata)
  while(current->data != searchdata)
 {
  if (current != NULL) {
-   printf("%d ",current->data);
+  // printf("%d ",current->data);
 
     if(current->data > searchdata){ //go to left tree
       current = current->left;}
