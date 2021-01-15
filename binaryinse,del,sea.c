@@ -129,5 +129,5 @@ void main(){
 						printf("\nThe element %d was not found in the binary search tree\n", item);
                 break;
         case 4:exit(0);
-        }
+        }}
     }
