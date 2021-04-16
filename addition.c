@@ -1,131 +1,115 @@
 #include<stdio.h>
-int ta[100][3],tb[100][3],ts[100][3];
-void tuple( int nzero,int r,int co,int a[100][100],int p [100][3])
-{  int i,j; 
-   int sr=nzero+1;
-    
-    p[0][0]=r;
-    p[0][1]=co;
-    p[0][2]=nzero;
-    int s=1;
-    for(i=0;i<r;i++)
-	for(j=0;j<co;j++)
-	{
-	  if(a[i][j]!=0)
-        	{
-	        p[s][0]=i;
-			p[s][1]=j;
-			p[s][2]=a[i][j];
-			s++;
-		}
-        }
-  printf("\ntuple form of the matrix\n");
-     for(i=0;i<sr;i++)
-	{
-		for(j=0;j<3;j++)
-		printf("%5d",p[i][j]);
-		printf("\n");
-	}
+struct tup{
+int row;
+int col;
+int value;
+}ta[100],tb[100],add[100];
 
+ 
+int tuple(struct tup t[100],int a[100][100],int r,int c)
+{ t[0].row=r;
+         t[0].col=c;
+        int k=1;
+  for (int i=0;i<r;i++)
+     for(int j=0;j<c;j++)
+     {  if(a[i][j]!=0)
+      {   t[k].row=i;
+         t[k].col=j;
+         t[k].value=a[i][j];
+         k++;
+     }
+     }
+     t[0].value=k-1;
+       printf("\ntuple\n");
+     for (int i=0;i<k;i++)
+     {   printf("%d %d  %d\n",t[i].row,t[i].col,t[i].value);
+     }
+     return k;
 }
-void add(int c,int d )
-{  int i,j,t;
-    i=0;
-    j=0;
-     t=1;
-     
+void addt(int k1,int k2)
+{ int k3=1,i=1,j=1;
+    while(i<k1&&j<k2)
     
-    while(i<c+1 && j<d+1)
     {
-        if(ta[i][0]<tb[j][0] || (ta[i][0]==tb[j][0] && ta[i][1]<tb[j][1]))
+        if(ta[i].row<tb[j].row||(ta[i].row==tb[j].row)&&(ta[i].col<tb[j].col))
         {
-        ts[t][0]=ta[i][0];
-        ts[t][1]=ta[i][1];
-        ts[t][2]=ta[i][2];
-        i++;
-        t++;
+            add[k3].row=ta[i].row;
+            add[k3].col=ta[i].col;
+            add[k3].value=ta[i].value;
+            k3++;i++;
         }
-        else if(tb[j][0]<ta[i][0] || (ta[i][0]==tb[j][0] && tb[j][1]<ta[i][1]))
+       else if(ta[i].row>tb[j].row||(ta[i].row==tb[j].row)&&(ta[i].col>tb[j].col))
         {
-              ts[t][0]=tb[j][0];
-              ts[t][1]=tb[j][1];
-              ts[t][2]=tb[j][2];
-              j++;
-              t++;
+            add[k3].row=tb[j].row;
+            add[k3].col=tb[j].col;
+            add[k3].value=tb[j].value;
+            k3++;j++;
         }
-       else if(ta[i][0]==tb[j][0] && tb[j][1]==ta[i][1])
-       {
-              ts[t][0]=tb[j][0];
-              ts[t][1]=tb[j][1];
-              ts[t][2]=tb[j][2]+ta[i][2];
-              i++;
-              j++;
-              t++;
-       }
+         else 
+        {
+            add[k3].row=tb[j].row;
+            add[k3].col=tb[j].col;
+            add[k3].value=tb[j].value+ta[i].value;
+            k3++;i++;j++;
+        }
     }
-    while(i<c+1)
-    {
-        ts[t][0]=ta[i][0];
-        ts[t][1]=ta[i][1];
-        ts[t][2]=ta[i][2];
-        i++;
-        t++;
+        while(i<k1)
+        {
+           add[k3].row=ta[i].row;
+            add[k3].col=ta[i].col;
+            add[k3].value=ta[i].value;
+            k3++;i++; 
         }
-    while(j<d+1)
-     {
-              ts[t][0]=tb[j][0];
-              ts[t][1]=tb[j][1];
-              ts[t][2]=tb[j][2];
-              j++;
-              t++;
+         while(j<k2)
+        {
+           add[k3].row=tb[j].row;
+            add[k3].col=tb[j].col;
+            add[k3].value=tb[j].value;
+            k3++;j++;
         }
-   
-    printf("\n\n\n\n sum\n\n");
-    for(i=1;i<t;i++)
-     {
-       for(j=0;j<3;j++)
-         printf("%d ",ts[i][j]);
-       printf(" \n");
+    add[0].row=ta[0].row;
+    add[0].col=ta[0].col;
+    add[0].value=k3-1;
+     printf("\nadd tuple\n");
+     for (int i=0;i<k3;i++)
+     {   printf("%d %d  %d\n",add[i].row,add[i].col,add[i].value);
      }
-    }
+}
+
 void main()
-{
-    int a[100][100],b[100][100],j,i;
-    int non0a=0,non0b=0,m,n;
-    printf("enter no of rows and columns of matrix: \n");
-    scanf("%d %d",&m,&n);
-   
-    printf("enter matrix values of matrix A:");
-    for(i=0;i<m;i++)
-     {for(j=0;j<n;j++)
-       {
-        scanf("%d",&a[i][j]);
-        if(a[i][j]!=0)
-         non0a++;
-       }
-     }    
-    for(i=0;i<m;i++)
-     {
-       for(j=0;j<n;j++)
-         printf("%d ",a[i][j]);
-       printf(" \n");
+{  int a[100][100],b[100][100];
+    int r;
+    int c;
+    int value;
+    printf("enter the no of row and column");
+    scanf("%d,%d",&r,&c);
+    printf("A:\n");
+    for (int i=0;i<r;i++)
+     for(int j=0;j<c;j++)
+     {  scanf("%d",&value);
+         a[i][j]= value;
      }
-     tuple( non0a, m, n, a,ta);
-      printf("enter matrix values of matrix B");
-    for(i=0;i<m;i++)
-     {for(j=0;j<n;j++)
-      {
-        scanf("%d",&b[i][j]);
-        if(a[i][j]!=0)
-         non0b++;
-      }
+     printf("\narr\n");
+     for (int i=0;i<r;i++)
+ {    for(int j=0;j<c;j++)
+     {   printf("%d\t",a[i][j]);
+         
+     }printf("\n");
+}printf("B:\n");
+   for (int i=0;i<r;i++)
+     for(int j=0;j<c;j++)
+     {   scanf("%d",&value);
+         b[i][j]= value;
      }
-    for(i=0;i<m;i++)
-     {
-       for(j=0;j<n;j++)
-         printf("%d ",b[i][j]);
-       printf(" \n");
-     }
-    tuple( non0b, m, n, b,tb);
-    add(non0a,non0b);
+     printf("\narr\n");
+     for (int i=0;i<r;i++)
+ {    for(int j=0;j<c;j++)
+     {   printf("%d\t",b[i][j]);
+         
+     }printf("\n");
+}
+    int k1= tuple(ta,a,r,c);
+     int k2=tuple(tb,b,r,c);
+     addt(k1,k2);
+    
 }
